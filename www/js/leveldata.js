@@ -356,6 +356,114 @@ function levelData2(){
 	tmp = [];
 	//LEVEL 0
 	tmp.push({});
-	
+	//LEVEL 1
+	tmp.push({
+		solid : [
+				{type:"rect", x:V.W/2, y:V.H-V.H/5, xs:V.W/2, ys:V.H/15},
+				],
+
+		shape : [
+				{type:"rect", count: 10, xs:V.W/10, ys:V.W/10, options: {
+					render: { 
+						fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				],
+		extra: function(){
+			if(!window.localStorage.getItem(101))
+			var timerTutorial = setInterval(function () {tutorial()}, 200);
+			var timerCounter = 0;
+		    function tutorial() {
+		    	ctx.clearRect(0,0,V.W,V.H/3);
+		    	ctx.fillStyle = "#383838";
+		    	ctx.font=V.W/20+"px Arial"; 
+    			if(timerCounter < 1){
+    				ctx.fillText("It's me again.", V.W/3, V.H/8);
+    				timerCounter+=0.05;
+    			}
+    			else if(timerCounter < 2){
+    				ctx.fillText("Now, don't let fall block.", V.W/4, V.H/8);
+    				timerCounter+=0.02;	
+    			}
+    			else if(timerCounter < 5){
+    				window.clearTimeout(timerTutorial)
+    			}
+		    }
+		}	
+	});
+	//LEVEL 2
+	tmp.push({
+		solid : [
+				{type:"rect", x:V.W/3, y:V.H-V.H/5, xs:V.W/10, ys:V.H/20},
+				{type:"rect", x:V.W-V.W/3, y:V.H-V.H/5, xs:V.W/10, ys:V.H/20},
+				{type:"rect", x:V.W/2, y:V.H-V.H/5, xs:V.W/10, ys:V.H/20},
+				],
+
+		shape : [
+				{type:"rect", count: 20, xs:V.W/10, ys:V.W/10, options: {
+					render: { 
+						fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				],
+	});
+	//LEVEL 3
+	tmp.push({
+		solid : [
+				{type:"rect", x:V.W/6, y:V.H-V.H/5, xs:V.H/30, ys:V.H/30},
+				{type:"rect", x:V.W/3, y:V.H-V.H/5, xs:V.H/30, ys:V.H/30},
+				{type:"rect", x:V.W/2, y:V.H-V.H/5, xs:V.H/30, ys:V.H/30},
+				{type:"rect", x:V.W-V.W/3, y:V.H-V.H/5, xs:V.H/30, ys:V.H/30},
+				{type:"rect", x:V.W-V.W/6, y:V.H-V.H/5, xs:V.H/30, ys:V.H/30},
+				],
+
+		shape : [
+				{type:"circle", count: 10, rs:V.H/30, options: {
+					render: { 
+			        	fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				],
+	});
+	//LEVEL 4
+	tmp.push({
+		solid : [
+				{type:"circle", x:V.W/6, y:V.H-V.H/6, rs:V.W/40},
+				{type:"circle", x:V.W-V.W/6, y:V.H-V.H/6, rs:V.W/40},
+				{type:"circle", x:V.W-V.W/2, y:V.H-V.H/10, rs:V.W/40},
+				],
+		shape : [
+			{type:"triangle", count: 2, xs:V.H/5, ys:V.H/20, slope:0.99, options: {
+				angle: Math.PI,
+				friction: 0.5,
+				render: {
+					fillStyle: '#00b9d2',
+					strokeStyle: '#10100F',
+					lineWidth: 2, 
+				}
+			}},
+			{type:"circle", count: 10, rs:V.H/30, options: {
+					render: { 
+			        	fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+			],
+	});
+	//LEVEL BLOCK
+	tmp.push({
+		solid : [
+				],
+		shape : [
+			{type:"triangle", count: 2, xs:V.H/5, ys:V.H/20, slope:0.99, options: {	}},
+		],
+	});
 	return tmp;
 }
