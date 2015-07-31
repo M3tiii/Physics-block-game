@@ -133,7 +133,7 @@ Game = {
       volume: 0.2,
     })    
 
-    theme.play();
+    //theme.play();
 
     Game.menu();
   },
@@ -231,6 +231,7 @@ Game = {
           V.Blocklist[V.Blocklist.length] = Bodies.trapezoid(x, y, selected.xs, selected.ys, selected.slope,  selected.options);
         }
         blockCount[V.actualBox.shapeId] --;
+        blockCount[blockCount.length-1] --;
         V.actualBox.text = blockCount[V.actualBox.shapeId] + "";
         World.add(engine.world, [ V.Blocklist[V.Blocklist.length-1] ]);
       }
@@ -244,33 +245,33 @@ Game = {
         Sleeping.set(engine.world.bodies[i], false);
         engine.world.bodies[i].mass = 10;
       }
-        var timerClear = setInterval(function () {
-        //console.log("a")
-      if(engine.world.bodies.length <= blockCount.length){
-        //console.log("clear")
-        World.clear(engine.world,false);
-        V.actualBox = {};
-        V.Blocklist = [];
-        //ctx.clearRect(0,0,V.W,V.H);
-        //World.clear(engineMenu.world,false);
-        //Engine.clear(engineMenu);
-        
-        //Engine.clear(engine);
-        ctxKey.clearRect(0,0,V.W,V.H);
-        ctx.clearRect(0,0,V.W,V.H);
-        document.removeEventListener("touchmove", Game.onKey, true);
-        document.removeEventListener("touchend", Game.onKey, true);
-        Events.off(engine, "tick");
-        levelPackMenu(actualPack);
+      Events.off(engine, "tick");
+      var timerClear = setInterval(function () {
+        for(var i=0; i<engine.world.bodies.length; i++)
+          if(engine.world.bodies[i].position.y > V.H*2)
+            Composite.remove(engine.world, engine.world.bodies[i]);
+          
+        if(engine.world.bodies.length <= blockCount.length){
 
-        if(retry)
-          Game.play(V.actual);
-        else
-          canvasMenu.style.display = "block";
+          console.log("clear")
+          World.clear(engine.world,false);
+          V.actualBox = {};
+          V.Blocklist = [];
 
-        window.clearTimeout(timerClear)
-      return true
-      }
+          ctxKey.clearRect(0,0,V.W,V.H);
+          ctx.clearRect(0,0,V.W,V.H);
+          document.removeEventListener("touchmove", Game.onKey, true);
+          document.removeEventListener("touchend", Game.onKey, true);
+          levelPackMenu(actualPack);
+
+          if(retry)
+            Game.play(V.actual);
+          else
+            canvasMenu.style.display = "block";
+
+          window.clearTimeout(timerClear);
+          return true;
+        }
       }, 100);
     }
   },
@@ -313,14 +314,11 @@ Game = {
             engine.world.constraints[j].pointA.y = -V.MenuHeight/1.5;
           break;
           }
-      } 
+      }
       switch (actualPack){
       case 0:
         for(var i=0; i<engine.world.bodies.length; i++){
-          //console.log(engine.world.bodies[i])
-          if(engine.world.bodies[i].spike){
-            //console.log(engine.world.bodies[i])
-          }
+
           if(engine.world.bodies[i].position.y > V.H*2){
             Composite.remove(engine.world, engine.world.bodies[i])
           }
@@ -328,10 +326,9 @@ Game = {
             var tmpIn = true
             timer+=0.5;
             if(timer >= 200){
-                if(Game.clear(false)){
-                  window.localStorage.setItem(actualPack*100+level, true);
-                  console.log("WYGRALES");
-                }
+              Game.clear(false)
+              window.localStorage.setItem(actualPack*100+level, true);
+              console.log("WYGRALES");
             }
           }
         }  
@@ -343,25 +340,18 @@ Game = {
         //@@@@@@@@@@@@@@@@
       case 1:
         for(var i=0; i<engine.world.bodies.length; i++){
-          if(engine.world.bodies[i].position.y > V.H){
+          if(engine.world.bodies[i].position.y > V.H*2){
             Composite.remove(engine.world, engine.world.bodies[i])
             Game.clear(true);
-            //console.log("Przegrana");
+            console.log(engine.world.bodies[i]);
           }
         }
-        var tmpCount = 0;
-        for(var i=0; i<blockCount.length; i++){
-          //console.log(blockCount[i]);
-          tmpCount += blockCount[i];
-          //przy tworzeniu bloku odejmowac od blockCount[0] <- w niej ilosc pozostalych el
-        }
-        if(!tmpCount){
+        if(!blockCount[blockCount.length-1]){
           timer++;
           if(timer >= 200){
-            if(Game.clear(false)){
-              window.localStorage.setItem(actualPack*100+level, true);
-              console.log("WYGRALES"); 
-            } 
+            Game.clear(false);
+            window.localStorage.setItem(actualPack*100+level, true);
+            console.log("WYGRALES"); 
           }
         }
         break;

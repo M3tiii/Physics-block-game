@@ -36,7 +36,13 @@ function prepare(actualLevel){
 	for(var i=0; i<V.level[actualPack][actualLevel].shape.length; i++){
 		blockCount[i] = V.level[actualPack][actualLevel].shape[i].count;
 	}
-
+	var tmpLength = blockCount.length;
+	var tmpBlockCount = 0;
+	for(var i=0; i<tmpLength; i++){
+		tmpBlockCount += blockCount[i];
+	}
+	blockCount[tmpLength] = tmpBlockCount;
+	
 	//Draw retry button
 	ctx.drawImage(
 		retry,
