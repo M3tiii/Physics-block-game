@@ -174,12 +174,11 @@ Game = {
     //Rerty && Exit
     if(ev.type == "touchend")
     if(y > V.H-exit.height && x < exit.width){
-      Game.clear();
+      Game.clear(false);
       //console.log("WYJSCIE Z POZIOMU");
-      canvasMenu.style.display = "block";
+      
     }else if(y > V.H-retry.height && x > V.W-retry.width){
-      Game.clear();
-      Game.play(V.actual);
+      Game.clear(true);
     }
 
     y = y - ((V.H-y)/3)-V.H/10;
@@ -237,20 +236,43 @@ Game = {
       }
     }
   },
-  clear: function(){
-    World.clear(engine.world,false);
-    V.actualBox = {};
-    V.Blocklist = [];
-    //ctx.clearRect(0,0,V.W,V.H);
-    //World.clear(engineMenu.world,false);
-    //Engine.clear(engineMenu);
-    //Engine.clear(engine);
-    ctxKey.clearRect(0,0,V.W,V.H);
-    ctx.clearRect(0,0,V.W,V.H);
-    document.removeEventListener("touchmove", Game.onKey, true);
-    document.removeEventListener("touchend", Game.onKey, true);
-    Events.off(engine, "tick");
-    levelPackMenu(actualPack);
+  clear: function(retry){
+    if(!clearing){
+      clearing = true;
+      for(var i=0; i<engine.world.bodies.length; i++){
+        Body.setStatic(engine.world.bodies[i], false);
+        Sleeping.set(engine.world.bodies[i], false);
+        engine.world.bodies[i].mass = 10;
+      }
+        var timerClear = setInterval(function () {
+        //console.log("a")
+      if(engine.world.bodies.length <= blockCount.length){
+        //console.log("clear")
+        World.clear(engine.world,false);
+        V.actualBox = {};
+        V.Blocklist = [];
+        //ctx.clearRect(0,0,V.W,V.H);
+        //World.clear(engineMenu.world,false);
+        //Engine.clear(engineMenu);
+        
+        //Engine.clear(engine);
+        ctxKey.clearRect(0,0,V.W,V.H);
+        ctx.clearRect(0,0,V.W,V.H);
+        document.removeEventListener("touchmove", Game.onKey, true);
+        document.removeEventListener("touchend", Game.onKey, true);
+        Events.off(engine, "tick");
+        levelPackMenu(actualPack);
+
+        if(retry)
+          Game.play(V.actual);
+        else
+          canvasMenu.style.display = "block";
+
+        window.clearTimeout(timerClear)
+      return true
+      }
+      }, 100);
+    }
   },
   play: function(level){
     document.addEventListener("touchmove", Game.onKey, true);
@@ -266,14 +288,14 @@ Game = {
     prepare(V.actual);
     //Chek height of boxes, Delete/Win
     win = false;
+    clearing = false;
     V.level[actualPack][level].goal ? goal = V.level[actualPack][level].goal.y : 0;
     timer = 0;
     //starsCounter = 0;
     Events.on(engine, "collisionStart",  function(e){
       if(e.pairs[0].bodyA.spike){
-        Game.clear();
+        Game.clear(true);
         //console.log("Przegrana");
-        canvasMenu.style.display = "block";
       }
      
     })
@@ -306,10 +328,10 @@ Game = {
             var tmpIn = true
             timer+=0.5;
             if(timer >= 200){
-                window.localStorage.setItem(actualPack*100+level, true);
-                Game.clear();
-                console.log("WYGRALES");
-                canvasMenu.style.display = "block";
+                if(Game.clear(false)){
+                  window.localStorage.setItem(actualPack*100+level, true);
+                  console.log("WYGRALES");
+                }
             }
           }
         }  
@@ -322,24 +344,24 @@ Game = {
       case 1:
         for(var i=0; i<engine.world.bodies.length; i++){
           if(engine.world.bodies[i].position.y > V.H){
-            Game.clear();
+            Composite.remove(engine.world, engine.world.bodies[i])
+            Game.clear(true);
             //console.log("Przegrana");
-            canvasMenu.style.display = "block";
           }
         }
         var tmpCount = 0;
         for(var i=0; i<blockCount.length; i++){
           //console.log(blockCount[i]);
           tmpCount += blockCount[i];
+          //przy tworzeniu bloku odejmowac od blockCount[0] <- w niej ilosc pozostalych el
         }
         if(!tmpCount){
           timer++;
           if(timer >= 200){
-            window.localStorage.setItem(actualPack*100+level, true);
-            Game.clear();
-            console.log("WYGRALES");
-            
-            canvasMenu.style.display = "block";
+            if(Game.clear(false)){
+              window.localStorage.setItem(actualPack*100+level, true);
+              console.log("WYGRALES"); 
+            } 
           }
         }
         break;
