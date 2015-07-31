@@ -457,6 +457,61 @@ function levelData2(){
 				}},
 			],
 	});
+	//LEVEL 5
+	tmp.push({
+		solid : [
+				{type:"triangle", x:V.W/8, y:V.H-V.H/5+V.H/45, xs:V.W/8, ys:V.H/30, slope:0.99, angle:0},
+				{type:"triangle", x:V.W-V.W/8, y:V.H-V.H/5+V.H/45, xs:V.W/8, ys:V.H/30, slope:0.99, angle:0},
+				{type:"triangle", x:V.W/2, y:V.H-V.H/5, xs:V.W/3, ys:V.H/10, slope:0.99, angle:0},
+				//{type:"rect", x:V.W-V.W/3, y:V.H-V.H/5, xs:V.H/30, ys:V.H/30},
+
+				],
+
+		shape : [
+				{type:"circle", count: 5, rs:V.W/12, options: {
+					render: { 
+			        	fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				{type:"rect", count: 15, xs:V.H/22, ys:V.H/22, options: {
+					render: { 
+						fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				],
+	});
+	//LEVEL 6
+	tmp.push({
+		solid : [
+				{type:"rect", x:V.W/2, y:V.H-V.H/7, xs:V.H/40, ys:V.H/40},
+				{type:"rect", x:V.W/3, y:V.H-V.H/8, xs:V.H/40, ys:V.H/40},
+				{type:"rect", x:V.W-V.W/3, y:V.H-V.H/8, xs:V.H/40, ys:V.H/40},
+				{type:"triangle", x:V.W/4, y:V.H-V.H/3, xs:V.H/18, ys:V.H/40, angle:Math.PI*1.5, slope:0.99},
+				{type:"triangle", x:V.W-V.W/4, y:V.H-V.H/3, xs:V.H/18, ys:V.H/40, angle:Math.PI*0.5, slope:0.99},
+
+				],
+
+		shape : [
+				{type:"circle", count: 4, rs:V.W/10, options: {
+					render: { 
+			        	fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				{type:"rect", count: 12, xs:V.H/16, ys:V.H/16, options: {
+					render: { 
+						fillStyle: '#E37676',
+						strokeStyle: '#10100F',
+						lineWidth: 2,
+					}
+				}},
+				],
+	});
 	//LEVEL BLOCK
 	tmp.push({
 		solid : [
