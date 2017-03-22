@@ -125,7 +125,7 @@ function levelData1(){
 			}},
 			],
 		goal : {
-			y: V.H/2,
+			y: V.H/2+150,
 		}	});
 	//LEVEL 4
 	tmp.push({
